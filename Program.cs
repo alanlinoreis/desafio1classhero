@@ -4,10 +4,8 @@
 //conteúdos de váriaveis inteiras não podem ter casas decimais;
 //conteúdos de váriaveis char devem ser atribuidas entre '' e não entre ""
 
-string nome = "João";
-int valorProduto = 29;
-char resposta = 'S';
+string nome;
+nome = Console.ReadLine();
 
-Console.WriteLine(nome);
-Console.WriteLine(valorProduto);
-Console.WriteLine(resposta);
+
+Console.WriteLine("Boas vindas "+ nome);
