@@ -1,11 +1,18 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿// Definindo o tamanho do array
+int quantidade = 5;
 
-//conteúdos de váriaveis string devem ser atribuidas entre "" e não entre ''
-//conteúdos de váriaveis inteiras não podem ter casas decimais;
-//conteúdos de váriaveis char devem ser atribuidas entre '' e não entre ""
+Console.WriteLine("Digite os nomes de 5 pessoas:");
+string?[] nomes = new string[quantidade];
+// Leitura dos nomes e armazenamento no array
+for (int i = 0; i < quantidade; i++)
+{
+    Console.Write($"Nome {i + 1}: ");
+    nomes[i] = Console.ReadLine();
+}
 
-string nome;
-nome = Console.ReadLine();
-
-
-Console.WriteLine("Boas vindas "+ nome);
+Console.WriteLine("\nNomes digitados:");
+// Exibindo os nomes armazenados
+for (int i = 0; i < quantidade; i++)
+{
+    Console.WriteLine($"- {nomes[i]}");
+}
