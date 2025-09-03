@@ -1,18 +1,85 @@
-﻿// Definindo o tamanho do array
-int quantidade = 5;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
-Console.WriteLine("Digite os nomes de 5 pessoas:");
-string?[] nomes = new string[quantidade];
-// Leitura dos nomes e armazenamento no array
-for (int i = 0; i < quantidade; i++)
+namespace desafio1classhero
 {
-    Console.Write($"Nome {i + 1}: ");
-    nomes[i] = Console.ReadLine();
-}
+    class Aluno
+    {
+        private List<double> notas;
 
-Console.WriteLine("\nNomes digitados:");
-// Exibindo os nomes armazenados
-for (int i = 0; i < quantidade; i++)
-{
-    Console.WriteLine($"- {nomes[i]}");
+        public Aluno()
+        {
+            notas = new List<double>();
+        }
+
+        // Método para adicionar nota com validação
+        public bool AdicionarNota(double nota)
+        {
+            if (nota >= 0 && nota <= 10)
+            {
+                notas.Add(nota);
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Nota inválida. Insira uma nota entre 0 e 10.");
+                return false;
+            }
+        }
+
+        // Método para calcular a média das notas
+        public double CalcularMedia()
+        {
+            if (notas.Count == 0)
+                return 0;
+
+            return notas.Average();
+        }
+
+        // Método para verificar se foi aprovado
+        public bool EstaAprovado()
+        {
+            return CalcularMedia() >= 6;
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Aluno aluno = new Aluno();
+            Console.WriteLine("Digite as notas do aluno. Digite 'sair' para encerrar:");
+
+            while (true)
+            {
+                Console.Write("Nota: ");
+                string entrada = Console.ReadLine();
+
+                if (entrada.ToLower() == "sair")
+                    break;
+
+                if (double.TryParse(entrada, out double nota))
+                {
+                    aluno.AdicionarNota(nota);
+                }
+                else
+                {
+                    Console.WriteLine("Entrada inválida. Por favor, digite um número.");
+                }
+            }
+
+            double media = aluno.CalcularMedia();
+            Console.WriteLine($"\nMédia final: {media:F2}");
+
+            if (aluno.EstaAprovado())
+            {
+                Console.WriteLine("Status: Aprovado");
+            }
+            else
+            {
+                Console.WriteLine("Status: Reprovado");
+            }
+        }
+    }
 }
