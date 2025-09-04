@@ -1,21 +1,24 @@
--- 1. Criação da tabela funcionarios
-CREATE TABLE funcionarios (
-    id       NUMBER PRIMARY KEY,
-    nome     VARCHAR2(100),
-    cargo    VARCHAR2(50),
-    salario  NUMBER(10, 2)
+-- 1. Criação da sequence para gerar IDs automaticamente
+CREATE SEQUENCE seq_log_id
+START WITH 1
+INCREMENT BY 1
+NOCACHE
+NOCYCLE;
+
+-- 2. Criação da tabela logs
+CREATE TABLE logs (
+    log_id     NUMBER PRIMARY KEY,
+    mensagem   VARCHAR2(255),
+    data_log   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 2. Alteração da tabela para adicionar a coluna data_nascimento
-ALTER TABLE funcionarios
-ADD data_nascimento DATE;
-
--- 3. Inserção de dados de exemplo
-INSERT INTO funcionarios (id, nome, cargo, salario, data_nascimento)
-VALUES (1, 'João Silva', 'Analista', 4500.00, TO_DATE('1990-05-15', 'YYYY-MM-DD'));
-
-INSERT INTO funcionarios (id, nome, cargo, salario, data_nascimento)
-VALUES (2, 'Maria Souza', 'Gerente', 7500.00, TO_DATE('1985-11-22', 'YYYY-MM-DD'));
-
--- 4. Confirmação das alterações
-COMMIT;
+-- 3. Criação da trigger para preencher log_id automaticamente
+CREATE OR REPLACE TRIGGER trg_logs_bi
+BEFORE INSERT ON logs
+FOR EACH ROW
+BEGIN
+    IF :NEW.log_id IS NULL THEN
+        :NEW.log_id := seq_log_id.NEXTVAL;
+    END IF;
+END;
+/
