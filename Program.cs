@@ -1,85 +1,68 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace desafio1classhero
+public class Temperatura
 {
-    class Aluno
+    private double valor;
+    private string escala; // "C" para Celsius, "F" para Fahrenheit
+
+    public Temperatura(double valor, string escala)
     {
-        private List<double> notas;
+        this.valor = valor;
+        this.escala = escala.ToUpper();
 
-        public Aluno()
-        {
-            notas = new List<double>();
-        }
-
-        // Método para adicionar nota com validação
-        public bool AdicionarNota(double nota)
-        {
-            if (nota >= 0 && nota <= 10)
-            {
-                notas.Add(nota);
-                return true;
-            }
-            else
-            {
-                Console.WriteLine("Nota inválida. Insira uma nota entre 0 e 10.");
-                return false;
-            }
-        }
-
-        // Método para calcular a média das notas
-        public double CalcularMedia()
-        {
-            if (notas.Count == 0)
-                return 0;
-
-            return notas.Average();
-        }
-
-        // Método para verificar se foi aprovado
-        public bool EstaAprovado()
-        {
-            return CalcularMedia() >= 6;
-        }
+        if (this.escala != "C" && this.escala != "F")
+            throw new ArgumentException("Escala inválida. Use 'C' para Celsius ou 'F' para Fahrenheit.");
     }
 
-    class Program
+    public double EmCelsius()
     {
-        static void Main(string[] args)
+        if (escala == "C")
+            return valor;
+        else
+            return (valor - 32) * 5 / 9; // F → C
+    }
+
+    public double EmFahrenheit()
+    {
+        if (escala == "F")
+            return valor;
+        else
+            return (valor * 9 / 5) + 32; // C → F
+    }
+
+    public override string ToString()
+    {
+        return $"{valor}°{escala}";
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine("Conversor de Temperatura");
+
+        Console.Write("Digite o valor da temperatura: ");
+        if (!double.TryParse(Console.ReadLine(), out double valor))
         {
-            Aluno aluno = new Aluno();
-            Console.WriteLine("Digite as notas do aluno. Digite 'sair' para encerrar:");
+            Console.WriteLine("Valor inválido.");
+            return;
+        }
 
-            while (true)
-            {
-                Console.Write("Nota: ");
-                string entrada = Console.ReadLine();
+        Console.Write("Digite a escala (C para Celsius, F para Fahrenheit): ");
+        string escala = Console.ReadLine();
 
-                if (entrada.ToLower() == "sair")
-                    break;
+        try
+        {
+            Temperatura temp = new Temperatura(valor, escala);
 
-                if (double.TryParse(entrada, out double nota))
-                {
-                    aluno.AdicionarNota(nota);
-                }
-                else
-                {
-                    Console.WriteLine("Entrada inválida. Por favor, digite um número.");
-                }
-            }
-
-            double media = aluno.CalcularMedia();
-            Console.WriteLine($"\nMédia final: {media:F2}");
-
-            if (aluno.EstaAprovado())
-            {
-                Console.WriteLine("Status: Aprovado");
-            }
-            else
-            {
-                Console.WriteLine("Status: Reprovado");
-            }
+            Console.WriteLine($"\nTemperatura original: {temp}");
+            Console.WriteLine($"Em Celsius: {temp.EmCelsius():F2}°C");
+            Console.WriteLine($"Em Fahrenheit: {temp.EmFahrenheit():F2}°F");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro: {ex.Message}");
         }
     }
 }
